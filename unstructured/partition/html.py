@@ -13,6 +13,7 @@ def partition_html(
     file: Optional[IO] = None,
     text: Optional[str] = None,
     url: Optional[str] = None,
+    encoding: Optional[str] = "utf-8",
     include_page_breaks: bool = False,
     include_metadata: bool = True,
     parser: VALID_PARSERS = None,
@@ -29,6 +30,8 @@ def partition_html(
         The string representation of the HTML document.
     url
         The URL of a webpage to parse. Only for URLs that return an HTML document.
+    encoding
+        The encoding method used to decode the text input. If None, utf-8 will be used.
     include_page_breaks
         If True, includes page breaks at the end of each page in the document.
     include_metadata
@@ -41,12 +44,12 @@ def partition_html(
         raise ValueError("One of filename, file, or text must be specified.")
 
     if filename is not None and not file and not text and not url:
-        document = HTMLDocument.from_file(filename, parser=parser)
+        document = HTMLDocument.from_file(filename, parser=parser, encoding=encoding)
 
     elif file is not None and not filename and not text and not url:
         file_content = file.read()
         if isinstance(file_content, bytes):
-            file_text = file_content.decode("utf-8")
+            file_text = file_content.decode(encoding)
         else:
             file_text = file_content
 

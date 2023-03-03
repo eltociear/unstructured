@@ -139,7 +139,9 @@ def partition_email(
     file: Optional[IO] = None,
     text: Optional[str] = None,
     content_source: str = "text/html",
+    encoding: Optional[str] = "utf-8",
     include_headers: bool = False,
+
 ) -> List[Element]:
     """Partitions an .eml documents into its constituent elements.
     Parameters
@@ -153,6 +155,8 @@ def partition_email(
     content_source
         default: "text/html"
         other: "text/plain"
+    encoding
+        The encoding method used to decode the text input. If None, utf-8 will be used.
     """
     if content_source not in VALID_CONTENT_SOURCES:
         raise ValueError(
@@ -170,7 +174,7 @@ def partition_email(
     elif file is not None and not filename and not text:
         file_content = file.read()
         if isinstance(file_content, bytes):
-            file_text = file_content.decode("utf-8")
+            file_text = file_content.decode(encoding)
         else:
             file_text = file_content
 
